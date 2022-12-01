@@ -27,6 +27,8 @@ fn main() {
 	for i, days in all_days {
 		if days.trim_space().len == 0 { continue }
 		name := days.trim_right("/")
+		if name == "vlang" { continue }
+
 		readme_file += "| ${i+1} | $name | [$days](./$days) |\n"
 	}
 
