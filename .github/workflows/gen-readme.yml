@@ -15,8 +15,11 @@ jobs:
       - name: Checks-out your repository
         uses: actions/checkout@v3
 
-      - name: Run generation
-        run: ./gen-readme
+      - name: Setup Vlang environment
+        uses: vlang/setup-v@v1.1
+
+      - name: Run a one-line script
+        run: v run gen-readme.v
 
       - name: Add and Commit
         uses: EndBug/add-and-commit@v9
