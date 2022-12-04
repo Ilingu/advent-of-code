@@ -3,7 +3,7 @@ import os
 const readme_path = "./README.md"
 const new_line = "\n\n"
 
-const title = "# Advent 2022 📮$new_line"
+const title = "# Advent 2022 👨‍💻$new_line"
 const desc = "### This repo is my personal submission of the [Advent Code 2022 calendar](https://adventofcode.com/2022)$new_line"
 const sep = "---$new_line"
 const table_layout = "| No. | Title | Code |\n| --- | ----- | ---- |\n"
