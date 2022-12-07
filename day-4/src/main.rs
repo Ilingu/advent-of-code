@@ -23,8 +23,8 @@ fn main() {
             p1 += 1
         }
 
-        let elf1 = elf1_min..(elf1_max + 1);
-        let elf2 = elf2_min..(elf2_max + 1);
+        let elf1 = elf1_min..=elf1_max;
+        let elf2 = elf2_min..=elf2_max;
         for num in elf1.clone() {
             if elf2.contains(&num) {
                 p2 += 1;
