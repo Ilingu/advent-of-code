@@ -40,8 +40,12 @@ impl Operation {
         };
     }
 
-    pub fn exec(&self, num: i32) -> i32 {
-        let parse_rl = |rl: &String| rl.replace("old", &num.to_string()).parse::<i32>().unwrap();
+    pub fn exec(&self, num: isize) -> isize {
+        let parse_rl = |rl: &String| {
+            rl.replace("old", &num.to_string())
+                .parse::<isize>()
+                .unwrap()
+        };
         match self.sign {
             Signs::PLUS => parse_rl(&self.left) + parse_rl(&self.right),
             Signs::TIMES => parse_rl(&self.left) * parse_rl(&self.right),
@@ -52,9 +56,9 @@ impl Operation {
 #[derive(Debug, Clone)]
 pub struct Monkey {
     pub id: usize,
-    pub items_worry: Vec<i32>,
+    pub items_worry: Vec<isize>,
     pub op: Operation,
-    pub test: i32,
+    pub test: isize,
     pub mk_true: usize,
     pub mk_false: usize,
     pub inspected_no: usize,
@@ -85,7 +89,7 @@ impl Monkey {
             txt.matches(char::is_numeric)
                 .collect::<Vec<&str>>()
                 .join("")
-                .parse::<i32>()
+                .parse::<isize>()
                 .unwrap()
         };
 
@@ -97,8 +101,8 @@ impl Monkey {
             .replace(" ", "")
             .trim_start_matches("Startingitems:")
             .split(",")
-            .map(|x| x.parse::<i32>().unwrap())
-            .collect::<Vec<i32>>();
+            .map(|x| x.parse::<isize>().unwrap())
+            .collect::<Vec<isize>>();
 
         let op = Operation::parse(datas.next().unwrap().trim());
 
@@ -118,11 +122,11 @@ impl Monkey {
     }
 
     /// return the new mk_id to throw at
-    pub fn inspect(&mut self, item_id: usize) -> (usize, i32) {
+    pub fn inspect(&mut self, item_id: usize, supermod: isize) -> (usize, isize) {
         self.inspected_no += 1;
         let mut worry_lvl = *self.items_worry.get(item_id).unwrap();
-        worry_lvl = self.op.exec(worry_lvl);
-        worry_lvl = worry_lvl.div_euclid(3);
+        worry_lvl = self.op.exec(worry_lvl) % supermod;
+        // worry_lvl = worry_lvl.div_euclid(3);
 
         if worry_lvl % self.test == 0 {
             return (self.mk_true, worry_lvl);
