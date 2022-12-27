@@ -2,7 +2,7 @@ use std::{collections::HashMap, vec};
 
 const ALPHABET: &str = "abcdefghijklmnopqrstuvwxyz";
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone)]
 enum Directions {
     UP,
     DOWN,
@@ -10,7 +10,7 @@ enum Directions {
     RIGHT,
 }
 
-#[derive(PartialEq, Clone, Debug, Copy)]
+#[derive(Clone, Copy)]
 struct Pos {
     x: isize,
     y: isize,
