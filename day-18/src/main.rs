@@ -25,7 +25,7 @@ impl Cube {
 }
 
 fn main() {
-    let coordinates = fs::read_to_string("./Assets/baseinput.txt")
+    let coordinates = fs::read_to_string("./Assets/input.txt")
         .unwrap()
         .split("\n")
         .map(|sp| {
@@ -92,9 +92,9 @@ fn main() {
     }
 
     let mut faces_to_extract: usize = 0;
-    for air_coord in air_coordinates {
+    for (air_coord, count) in air_sides_counts {
         match is_inside_rock(&map, (max_x, min_x, max_y, min_y, max_z, min_z), air_coord) {
-            true => faces_to_extract += air_sides_counts.get(&air_coord).unwrap(),
+            true => faces_to_extract += count,
             false => {}
         }
     }
@@ -114,6 +114,7 @@ fn get_abjacent_pos((x, y, z): Pos) -> [Pos; 6] {
     ]
 }
 
+// very very ineficient, takes approx 30-45s to complete on the real input...
 fn is_inside_rock(
     map: &HashMap<Pos, bool>,
     (max_x, min_x, max_y, min_y, max_z, min_z): (isize, isize, isize, isize, isize, isize),
@@ -123,12 +124,26 @@ fn is_inside_rock(
     let mut visited: Vec<Pos> = vec![air_coord];
 
     while abjacent_pos.len() != 0 {
-        for abj_pos in &abjacent_pos {
-            match map.get(abj_pos) {
-                Some(_) => {}
-                None => {}
-            }
+        let first_abj_pos = abjacent_pos[0];
+        if first_abj_pos.0 > max_x || first_abj_pos.0 < min_x {
+            return false;
         }
+        if first_abj_pos.1 > max_y || first_abj_pos.1 < min_y {
+            return false;
+        }
+        if first_abj_pos.2 > max_z || first_abj_pos.2 < min_z {
+            return false;
+        }
+
+        if !visited.contains(&first_abj_pos) {
+            match map.get(&first_abj_pos) {
+                Some(_) => {}
+                None => abjacent_pos.append(&mut get_abjacent_pos(first_abj_pos).to_vec()),
+            }
+            visited.push(first_abj_pos);
+        }
+
+        abjacent_pos.remove(0);
     }
     true
 }
