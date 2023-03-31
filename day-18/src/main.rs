@@ -2,7 +2,6 @@ use std::{collections::HashMap, fs};
 
 type Pos = (isize, isize, isize);
 
-#[derive(Debug)]
 pub struct Cube {
     x: isize,
     y: isize,
