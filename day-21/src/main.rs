@@ -119,7 +119,7 @@ fn p2(mut values_pool: HashMap<String, isize>, operations_pool: HashMap<String, 
 
     println!("{left_equation}={right_number}"); // solving this equation online gives us: x=3032671800353, so answer to part 2 is 3032671800353 (thanks to: https://www.mathpapa.com/equation-solver/)
     println!("3032671800353");
-    // PS: I could've take the time to evaluate it myself, but since the "online solver" worked immediatly, I was a bit lazy
+    // PS: I could've take the time to evaluate it myself (binary search, newtons thingy, or  just simplify all coeficient and compute the solution (since it's a very simple equation)...), but since the "online solver" worked immediatly, I was a bit lazy
 }
 
 fn recursive_humn(
