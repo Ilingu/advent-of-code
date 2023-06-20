@@ -1,0 +1,61 @@
+use std::{cmp::Ordering, collections::HashSet, fs};
+
+const EGGNOG_VOLUME: usize = 25;
+
+fn main() {
+    let input = fs::read_to_string("./src/baseinput.txt").unwrap();
+    let containers = input
+        .lines()
+        .map(|container| container.parse::<usize>().unwrap())
+        .collect::<Vec<_>>();
+
+    // bellow is wrong implementation, in fact it's a complete graph where I have to use DFS wisely with the EGGNOG_VOLUME
+
+    let mut seen = HashSet::new();
+    let mut combinations_of_containers = 0;
+    'outer: for (idx, container) in containers.iter().enumerate() {
+        let mut sum_containers = vec![(idx, *container)];
+        let possible_sub_container = containers
+            .iter()
+            .enumerate()
+            .filter(|(id, _)| id != &idx)
+            .map(|(i, c)| (i, *c))
+            .collect::<Vec<_>>();
+        assert!(!possible_sub_container.is_empty());
+        let mut sub_container_idx = 0;
+
+        loop {
+            if sub_container_idx >= possible_sub_container.len() {
+                continue 'outer;
+            }
+
+            let mut temp_sum_containers = sum_containers.clone();
+            temp_sum_containers.push(possible_sub_container[sub_container_idx]);
+
+            match temp_sum_containers
+                .iter()
+                .map(|(_, c)| c)
+                .sum::<usize>()
+                .cmp(&EGGNOG_VOLUME)
+            {
+                Ordering::Less => sum_containers = temp_sum_containers,
+                Ordering::Equal => {
+                    let mut hashable_sum = temp_sum_containers.clone();
+                    hashable_sum.sort_by(|a, b| a.1.cmp(&b.1));
+
+                    let hash = format!("{hashable_sum:?}");
+                    if !seen.contains(&hash) {
+                        println!("{hash}");
+                        seen.insert(hash);
+                        combinations_of_containers += 1;
+                    }
+                    sum_containers = vec![(idx, *container)];
+                }
+                Ordering::Greater => {}
+            }
+            sub_container_idx += 1;
+        }
+    }
+
+    println!("{combinations_of_containers}")
+}
