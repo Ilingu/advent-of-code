@@ -1,3 +1,5 @@
 /vlang
 target
 Cargo.lock
+.vscode
+*.out
